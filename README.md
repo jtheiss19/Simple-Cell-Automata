@@ -7,9 +7,10 @@
 ![GitHub issues](https://img.shields.io/github/issues-raw/jtheiss19/MARI-Engine)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jtheiss19/MARI-Engine)](https://goreportcard.com/report/github.com/jtheiss19/MARI-Engine)
 
+<a href="https://github.com/jtheiss19/Go-Open-API"><img src="./pictures/FinalPicture.png" alt="Demo Picture"></a>
 </div>
 
-<a href="https://github.com/jtheiss19/Go-Open-API"><img src="./pictures/FinalPicture.png" alt="Demo Picture"></a>
+
 
 
 ## Table of Contents
@@ -38,10 +39,6 @@ $ go run .
 ```
 
 # Features
-* Mouse Support [DONE]
-* Keyboard Support
-* Custom HTTP Sorting
-* TLS Support
 
 # License
 
