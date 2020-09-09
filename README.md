@@ -10,9 +10,6 @@
 <a href="https://github.com/jtheiss19/Go-Open-API"><img src="./pictures/FinalPicture.png" alt="Demo Picture"></a>
 </div>
 
-
-
-
 ## Table of Contents
 
 - [Introduction](#Introduction)
@@ -20,10 +17,7 @@
 - [Features](#features)
 - [License](#license)
 
-
-
 # Introduction
-
 
 # Installation
 

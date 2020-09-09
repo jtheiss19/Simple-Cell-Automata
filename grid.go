@@ -1,66 +1,58 @@
-package main
+//Package automata is a simple package for adding a felxable cellular automata simulations to go!
+package automata
 
 import (
 	"fmt"
 	"strconv"
 
+	"github.com/cheggaaa/pb"
 	"github.com/fogleman/gg"
 )
 
-// This package defines all the back ground static code. Think of this section as the simulation engine
-
-//Cell remain mostly unchanged, they carry the value name which can carry type such as "air" or "wood" for tree simulation
-type cell struct {
-	name  string
-	xPos  int
-	yPos  int
-	value float64
-}
-
-//NewGrid is the constructor function for the grid object
-func NewGrid(xSize, ySize int) grid {
-	myNewGrid := grid{colSize: xSize, rowSize: ySize, simFunction: defaultSimulation}
+//NewGrid is the constructor function for the Grid object
+func NewGrid(xSize, ySize int) Grid {
+	myNewGrid := Grid{ColSize: xSize, RowSize: ySize, SimFunction: defaultSimulation}
 	for row := 1; row <= ySize; row++ {
 		for col := 1; col <= xSize; col++ {
-			myNewCell := cell{name: "air", xPos: col, yPos: row, value: 0}
-			myNewGrid.cellList = append(myNewGrid.cellList, &myNewCell)
+			myNewCell := Cell{Type: "air", XPos: col, YPos: row, Value: 0}
+			myNewGrid.CellList = append(myNewGrid.CellList, &myNewCell)
 		}
 	}
 	return (myNewGrid)
 }
 
-//grid carrys a reference to and overidable function called simFunction. This is so the user can define a function and pass it to the specific grid. That way they can run parrell simulations
-type grid struct {
-	colSize     int
-	rowSize     int
-	cellList    []*cell
-	simFunction func(*grid)
+//Grid carrys a reference to and overidable function called simFunction. This is so the user can define a function and pass it to the specific Grid. That way they can run parrell simulations
+type Grid struct {
+	ColSize     int
+	RowSize     int
+	CellList    []*Cell
+	SimFunction func(*Grid)
 }
 
-//copyGrid preforms a deep copy of the grid to create new references in memory
-func (g *grid) copyGrid() grid {
+//CopyGrid preforms a deep copy of the Grid to create new references in memory
+func (g *Grid) CopyGrid() Grid {
 	tempGrid := *g
-	var tempCellList []*cell
-	for _, v := range g.cellList {
+	var tempCellList []*Cell
+	for _, v := range g.CellList {
 		newCell := *v
 		tempCellList = append(tempCellList, &newCell)
 	}
-	tempGrid.cellList = tempCellList
+	tempGrid.CellList = tempCellList
 	return (tempGrid)
 }
 
-//getCell is used to grab a specific cell
-func (g *grid) getCell(x, y int) *cell {
-	return (g.cellList[(y-1)*g.colSize+x-1])
+//GetCell is used to grab a specific cell
+func (g *Grid) GetCell(x, y int) *Cell {
+	return (g.CellList[(y-1)*g.ColSize+x-1])
 }
 
-//prettyPrint prints the grid to terminal, if it isn't pretty your grid is wider then your terminal
-func (g *grid) prettyPrint() {
+//PrettyPrint prints the Grid to terminal, if it isn't pretty your Grid is wider then your terminal
+func (g *Grid) PrettyPrint() {
 	var stringArray []string
-	for row := 1; row <= g.rowSize; row++ {
+	for row := 1; row <= g.RowSize; row++ {
 		tempString := ""
-		for col := 1; col <= g.colSize; col++ {
-			tempString = tempString + " " + strconv.FormatFloat(g.getCell(col, row).value, 'f', 3, 64)
+		for col := 1; col <= g.ColSize; col++ {
+			tempString = tempString + " " + strconv.FormatFloat(g.GetCell(col, row).Value, 'f', 3, 64)
 		}
 		stringArray = append(stringArray, tempString)
 	}
@@ -71,26 +63,45 @@ func (g *grid) prettyPrint() {
 	}
 }
 
-//printPNG prints a png of the current grid to the folder the program is ran in
-func (g *grid) printPNG(fileName string) {
-	dc := gg.NewContext(g.colSize, g.rowSize)
+//PrintPNG prints a png of the current Grid to the folder the program is ran in
+func (g *Grid) PrintPNG(fileType string) {
+	dc := gg.NewContext(g.ColSize, g.RowSize)
 
-	for _, v := range g.cellList {
-		dc.DrawRectangle(float64(g.colSize-v.xPos), float64(g.rowSize-v.yPos), 1, 1)
-		dc.SetRGB(v.value, 0, 0)
+	for _, v := range g.CellList {
+		dc.DrawRectangle(float64(g.ColSize-v.XPos), float64(g.RowSize-v.YPos), 1, 1)
+		dc.SetRGB(v.Value, 0, 0)
 		dc.Fill()
 	}
 
-	dc.SavePNG(fileName + ".png")
+	dc.SavePNG("./pictures/" + fileType + ".png")
 }
 
-//simulate calls the grids simulate function, defined here explicitly for potential pre-flight checks
-func (g *grid) simulate() {
-	g.simFunction(g)
+//Simulate calls the Grids simulate function, defined here explicitly for potential pre-flight checks
+func (g *Grid) Simulate() {
+	g.SimFunction(g)
+}
+
+//RunSimulation calls the Grids simulate function multiple times
+func (g *Grid) RunSimulation(steps int, interupt func(*Grid, int)) {
+	//Used for the progressbar (pb)
+	bar := pb.StartNew(steps)
+
+	//Simulation Loop
+	for i := 0; i < steps; i++ {
+
+		g.Simulate()
+
+		interupt(g, i)
+
+		bar.Increment()
+	}
+
+	bar.Finish()
+
 }
 
 //defaultSimulation is a catch all simulation function so that the user can't accidentally crash the program.
-func defaultSimulation(g *grid) {
-	tempGrid := g.copyGrid()
-	g.cellList = tempGrid.cellList
+func defaultSimulation(g *Grid) {
+	tempGrid := g.CopyGrid()
+	g.CellList = tempGrid.CellList
 }
