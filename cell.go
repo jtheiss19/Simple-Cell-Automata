@@ -24,10 +24,8 @@ func (c *Cell) draw(dc *gg.Context) {
 }
 
 func defaultSimFunc(cell *Cell) {
-
 }
 
 func defaultDrawFunc(dc *gg.Context, cell *Cell) {
 	dc.SetRGB(cell.Value, 0, 0)
-	dc.Fill()
 }

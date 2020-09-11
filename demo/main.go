@@ -8,26 +8,6 @@ import (
 	Automata "github.com/jtheiss19/Simple-Cell-Automata"
 )
 
-//Settings
-var (
-	timeSteps       = 10000
-	gridSize        = 400
-	interval        = 200
-	collectData     = false
-	collectPictures = false
-)
-
-//Physics Variables
-var (
-	conductionTransferRate = 0.03
-	convectionTransferRate = 0.01
-)
-
-//Global Variables
-var (
-	dataFile *os.File
-)
-
 func main() {
 	//initialize the grid
 	testGrid := Automata.NewGrid(gridSize, gridSize)
@@ -39,12 +19,20 @@ func main() {
 		}
 	}
 
-	testGrid.PrintPNG("Setup")
-
-	//Set your simulation function of kind func(*Cell)
-	for _, c := range testGrid.CellList {
-		c.SimFunc = mySimulationFunction
+	//Set your CellTypes
+	for col := 1; col <= testGrid.ColSize; col++ {
+		for row := 1; row <= testGrid.RowSize; row++ {
+			if col%50 == 0 {
+				testGrid.GetCell(col, row).SimFunc = TreeSimulation
+				testGrid.GetCell(col, row).DrawFunc = TreeDraw
+			} else {
+				testGrid.GetCell(col, row).SimFunc = AirSimulation
+				testGrid.GetCell(col, row).DrawFunc = AirDraw
+			}
+		}
 	}
+
+	testGrid.PrintPNG("Setup")
 
 	if collectData {
 		var err error
@@ -57,23 +45,6 @@ func main() {
 	testGrid.RunSimulation(timeSteps, myRunFunction)
 
 	testGrid.PrintPNG("FinalPicture")
-}
-
-func mySimulationFunction(c *Automata.Cell) {
-	//PHYSICS GOES HERE
-	c.Value =
-		c.Value +
-
-			//Conduction Heat transfer
-			conductionTransferRate*(c.Grid.GetCell(c.XPos, c.YPos-1).Value-c.Grid.GetCell(c.XPos, c.YPos).Value) + //Below Cell
-			conductionTransferRate*(c.Grid.GetCell(c.XPos, c.YPos+1).Value-c.Grid.GetCell(c.XPos, c.YPos).Value) + //Above Cell
-			conductionTransferRate*(c.Grid.GetCell(c.XPos-1, c.YPos).Value-c.Grid.GetCell(c.XPos, c.YPos).Value) + //Left Cell
-			conductionTransferRate*(c.Grid.GetCell(c.XPos+1, c.YPos).Value-c.Grid.GetCell(c.XPos, c.YPos).Value) + //Right Cell
-
-			//Convection Heat Transfer
-			convectionTransferRate*c.Grid.GetCell(c.XPos, c.YPos-1).Value -
-			convectionTransferRate*c.Grid.GetCell(c.XPos, c.YPos).Value
-
 }
 
 func myRunFunction(grid *Automata.Grid, i int) {

@@ -70,6 +70,7 @@ func (g *Grid) PrintPNG(fileType string) {
 	for _, v := range g.CellList {
 		dc.DrawRectangle(float64(g.ColSize-v.XPos), float64(g.RowSize-v.YPos), 1, 1)
 		v.draw(dc)
+		dc.Fill()
 	}
 
 	dc.SavePNG("./pictures/" + fileType + ".png")
