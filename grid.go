@@ -10,11 +10,11 @@ import (
 )
 
 //NewGrid is the constructor function for the Grid object
-func NewGrid(xSize, ySize int) Grid {
-	myNewGrid := Grid{ColSize: xSize, RowSize: ySize, SimFunction: defaultSimulation}
+func NewGrid(xSize, ySize int) *Grid {
+	myNewGrid := &Grid{ColSize: xSize, RowSize: ySize}
 	for row := 1; row <= ySize; row++ {
 		for col := 1; col <= xSize; col++ {
-			myNewCell := Cell{Type: "air", XPos: col, YPos: row, Value: 0}
+			myNewCell := Cell{XPos: col, YPos: row, Value: 0, Grid: myNewGrid, SimFunc: defaultSimFunc, DrawFunc: defaultDrawFunc}
 			myNewGrid.CellList = append(myNewGrid.CellList, &myNewCell)
 		}
 	}
@@ -23,22 +23,22 @@ func NewGrid(xSize, ySize int) Grid {
 
 //Grid carrys a reference to and overidable function called simFunction. This is so the user can define a function and pass it to the specific Grid. That way they can run parrell simulations
 type Grid struct {
-	ColSize     int
-	RowSize     int
-	CellList    []*Cell
-	SimFunction func(*Grid)
+	ColSize  int
+	RowSize  int
+	CellList []*Cell
 }
 
 //CopyGrid preforms a deep copy of the Grid to create new references in memory
-func (g *Grid) CopyGrid() Grid {
+func (g *Grid) CopyGrid() *Grid {
 	tempGrid := *g
 	var tempCellList []*Cell
 	for _, v := range g.CellList {
 		newCell := *v
+		newCell.Grid = g
 		tempCellList = append(tempCellList, &newCell)
 	}
 	tempGrid.CellList = tempCellList
-	return (tempGrid)
+	return (&tempGrid)
 }
 
 //GetCell is used to grab a specific cell
@@ -69,8 +69,7 @@ func (g *Grid) PrintPNG(fileType string) {
 
 	for _, v := range g.CellList {
 		dc.DrawRectangle(float64(g.ColSize-v.XPos), float64(g.RowSize-v.YPos), 1, 1)
-		dc.SetRGB(v.Value, 0, 0)
-		dc.Fill()
+		v.draw(dc)
 	}
 
 	dc.SavePNG("./pictures/" + fileType + ".png")
@@ -78,7 +77,20 @@ func (g *Grid) PrintPNG(fileType string) {
 
 //Simulate calls the Grids simulate function, defined here explicitly for potential pre-flight checks
 func (g *Grid) Simulate() {
-	g.SimFunction(g)
+
+	tempGrid := g.CopyGrid()
+
+	for row := 1; row <= tempGrid.RowSize; row++ {
+		for col := 1; col <= tempGrid.ColSize; col++ {
+			//ignore the edges
+			if row != 1 && row != tempGrid.RowSize {
+				if col != 1 && col != tempGrid.ColSize {
+					tempGrid.GetCell(col, row).simulate()
+				}
+			}
+		}
+	}
+	g.CellList = tempGrid.CellList
 }
 
 //RunSimulation calls the Grids simulate function multiple times
@@ -88,7 +100,6 @@ func (g *Grid) RunSimulation(steps int, interupt func(*Grid, int)) {
 
 	//Simulation Loop
 	for i := 0; i < steps; i++ {
-
 		g.Simulate()
 
 		interupt(g, i)
