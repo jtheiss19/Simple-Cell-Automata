@@ -28,6 +28,18 @@ type Grid struct {
 	CellList []*Cell
 }
 
+func (g *Grid) SetupGrid(SetupFunc func(*Grid, int, int)) {
+	for col := 1; col <= g.ColSize; col++ {
+		for row := 1; row <= g.RowSize; row++ {
+			if row != 1 && row != g.RowSize {
+				if col != 1 && col != g.ColSize {
+					SetupFunc(g, col, row)
+				}
+			}
+		}
+	}
+}
+
 //CopyGrid preforms a deep copy of the Grid to create new references in memory
 func (g *Grid) CopyGrid() *Grid {
 	tempGrid := *g

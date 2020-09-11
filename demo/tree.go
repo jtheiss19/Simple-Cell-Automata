@@ -23,7 +23,7 @@ func TreeSimulation(c *Automata.Cell) {
 }
 
 func TreeDraw(dc *gg.Context, cell *Automata.Cell) {
-	dc.SetRGB(0, 1, 0)
+	dc.SetRGB255(150, 75, 0)
 }
 
 func BurningTreeSim(c *Automata.Cell) {

@@ -1,13 +1,13 @@
 # Simple Cell Automata
 <div align="center">
   
-![GitHub contributors](https://img.shields.io/github/contributors/jtheiss19/MARI-Engine)
-![GitHub forks](https://img.shields.io/github/forks/jtheiss19/MARI-Engine?label=Forks)
-![GitHub stars](https://img.shields.io/github/stars/jtheiss19/MARI-Engine?style=Stars)
-![GitHub issues](https://img.shields.io/github/issues-raw/jtheiss19/MARI-Engine)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jtheiss19/MARI-Engine)](https://goreportcard.com/report/github.com/jtheiss19/MARI-Engine)
+![GitHub contributors](https://img.shields.io/github/contributors/jtheiss19/Simple-Cell-Automata)
+![GitHub forks](https://img.shields.io/github/forks/jtheiss19/Simple-Cell-Automata?label=Forks)
+![GitHub stars](https://img.shields.io/github/stars/jtheiss19/Simple-Cell-Automata?style=Stars)
+![GitHub issues](https://img.shields.io/github/issues-raw/jtheiss19/Simple-Cell-Automata)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jtheiss19/MARI-Engine)](https://goreportcard.com/report/github.com/jtheiss19/Simple-Cell-Automata)
 
-<a href="https://github.com/jtheiss19/Go-Open-API"><img src="./pictures/FinalPicture.png" alt="Demo Picture"></a>
+<a href="https://github.com/jtheiss19/Go-Open-API"><img src="./sampleOutput/fire_on_trees.gif" alt="Demo Gif"></a>
 </div>
 
 ## Table of Contents
