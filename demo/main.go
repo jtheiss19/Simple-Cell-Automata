@@ -12,7 +12,7 @@ func main() {
 
 	//Set the initial Values Manually
 	for col := 1; col <= testGrid.ColSize; col++ {
-		testGrid.GetCell(col, 250).Value = 1
+		testGrid.GetCell(col, gridSize/2+50).Value = 1
 	}
 
 	//OR set your cells using a function your CellTypes

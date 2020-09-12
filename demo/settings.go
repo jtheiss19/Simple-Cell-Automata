@@ -8,17 +8,17 @@ import (
 	Automata "github.com/jtheiss19/Simple-Cell-Automata"
 )
 
-//Settings
+//Simulator Settings
 var (
 	timeSteps       = 20000
 	gridSize        = 400
 	interval        = 200
 	slope           = 0
 	collectData     = false
-	collectPictures = true
+	collectPictures = false
 )
 
-//Physics Variables
+//Physics Constants
 var (
 	conductionTransferRate = 0.03
 	convectionTransferRate = 0.01

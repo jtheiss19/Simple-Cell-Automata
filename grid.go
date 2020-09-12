@@ -99,10 +99,12 @@ func (g *Grid) Simulate() {
 			if row != 1 && row != tempGrid.RowSize {
 				if col != 1 && col != tempGrid.ColSize {
 					tempGrid.GetCell(col, row).simulate()
+
 				}
 			}
 		}
 	}
+
 	g.CellList = tempGrid.CellList
 }
 
