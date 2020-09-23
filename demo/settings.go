@@ -15,7 +15,7 @@ var (
 	interval        = 200
 	slope           = 0
 	collectData     = false
-	collectPictures = false
+	collectPictures = true
 )
 
 //Physics Constants
